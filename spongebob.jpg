@@ -1,0 +1,11 @@
+--2018-11-03 01:49:41--  http://magazine.nicktv.it/wp-content/uploads/sites/11/2017/05/Mocking-Spongebob-Meme.jpg
+Resolving magazine.nicktv.it (magazine.nicktv.it)... 79.125.109.92
+Connecting to magazine.nicktv.it (magazine.nicktv.it)|79.125.109.92|:80... connected.
+HTTP request sent, awaiting response... 200 OK
+Length: 44518 (43K) [image/jpeg]
+Saving to: ‘Mocking-Spongebob-Meme.jpg’
+
+     0K .......... .......... .......... .......... ...       100%  129K=0.3s
+
+2018-11-03 01:49:41 (129 KB/s) - ‘Mocking-Spongebob-Meme.jpg’ saved [44518/44518]
+
