@@ -8,6 +8,7 @@ sudo apt-get install python3 python3-pip python3-virtualenv virtualenv
 virtualenv .env --python=python3
 source .env/bin/activate
 pip3 install -r requirements.txt
+python -m spacy download en_core_web_lg
 python3 api.py
 ```
 
@@ -25,6 +26,7 @@ This one doesn't need to be admin
 virtualenv .\env --python=python3
 .\env/bin/activate
 pip3 install -r requirements.txt
+python -m spacy download en_core_web_l
 python3 api.py
 ```
 
