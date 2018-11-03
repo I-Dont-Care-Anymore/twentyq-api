@@ -1,6 +1,7 @@
 from bs4 import BeautifulSoup
 from flask import Flask
 import requests
+import sys
 
 import pandas as pd
 from pandas import ExcelWriter
@@ -25,67 +26,101 @@ app = Flask(__name__)
 #if __name__ == "__main__":
 #    app.run()
 
-page = requests.get("https://www.naics.com/company-profile-page/?co=111")
-soup = BeautifulSoup(page.content, 'html.parser')
+compDUNS = []
+corpName = []
+tradeName = []
+POC = []
+title = []
+addr = []
+tele = []
+totEmp = []
+empSite = []
+sales = []
+pub = []
+year = []
+lat = []
+long = []
+nics1 = []
+nics1Name = []
+nics2 = []
+nics2Name = []
+sic1 = []
+sic1Name = []
+sic2 = []
+sic2Name = []
 
-desired = soup.find('table',  class_='companyDetail topCompanyDetail')
-cells = list(desired.children)
+for i in range(1, 12136) :
+    sys.stdout.write(str(i) + " ")
+    sys.stdout.flush()
 
-compDUNS, corpName, tradeName, POC, title, addr, tele, totEmp, empSite, sales, pub, year, lat = []
-long, nics1, nics1Name, nics2, nics2Name, sic1, sic1Name, sic2, sic2Name = []
+    url = "https://www.naics.com/company-profile-page/?co=" + str(i)
+    page = requests.get(url)
 
-compDUNS.append((cells[0].get_text())[15:])      # Company DUNS#:
+    if page.status_code != 200:
+        break
 
-cutoff = (cells[1].get_text()).index("Tradestyle Name: ")
-corpName.append((cells[1].get_text())[16:cutoff])      # Corporate Name:
-cutoff = cutoff + 17
+    soup = BeautifulSoup(page.content, 'html.parser')
 
-tradeName.append((cells[1].get_text())[cutoff:])  # Tradestyle Name:
+    desired = soup.find('table', class_='companyDetail topCompanyDetail')
 
-cutoff = (cells[2].get_text()).index("Title: ")
-POC.append((cells[2].get_text())[18:cutoff])      # Point of Contact:
-cutoff = cutoff + 7
+    if desired == None:
+        continue
 
-title.append((cells[2].get_text())[cutoff:])  # Title:
+    cells = list(desired.children)
 
-addr.append((cells[3].get_text())[9:])       # Address:
 
-tele.append((cells[4].get_text())[11:])      # Telephone:
+    compDUNS.append((cells[0].get_text())[15:])      # Company DUNS#:
 
-cutoff = (cells[5].get_text()).index("Employees On Site: ")
-totEmp.append((cells[5].get_text())[17:cutoff])      # Total Employees:
-cutoff = cutoff + 19
-empSite.append((cells[5].get_text())[cutoff:])  # Employees on Site:
+    cutoff = (cells[1].get_text()).index("Tradestyle Name: ")
+    corpName.append((cells[1].get_text())[16:cutoff])      # Corporate Name:
+    cutoff = cutoff + 17
 
-sales.append((cells[6].get_text())[14:])      # Sales Volume:
+    tradeName.append((cells[1].get_text())[cutoff:])  # Tradestyle Name:
 
-cutoff = (cells[7].get_text()).index("Year Started: ")
-pub.append((cells[7].get_text())[16:cutoff])      # Public/Private:
-cutoff = cutoff + 14
+    cutoff = (cells[2].get_text()).index("Title: ")
+    POC.append((cells[2].get_text())[18:cutoff])      # Point of Contact:
+    cutoff = cutoff + 7
 
-year.append((cells[7].get_text())[cutoff:])       # Year Started:
+    title.append((cells[2].get_text())[cutoff:])  # Title:
 
-cutoff = (cells[8].get_text()).index("Longitude: ")
-lat.append((cells[8].get_text())[10:cutoff])       # Latitude:
-cutoff = cutoff + 11
+    addr.append((cells[3].get_text())[9:])       # Address:
 
-long.append((cells[8].get_text())[cutoff:])      # Longitude:
+    tele.append((cells[4].get_text())[11:])      # Telephone:
 
-nics1.append((cells[9].get_text())[9:15])     # NAICS 1:
+    cutoff = (cells[5].get_text()).index("Employees On Site: ")
+    totEmp.append((cells[5].get_text())[17:cutoff])      # Total Employees:
+    cutoff = cutoff + 19
+    empSite.append((cells[5].get_text())[cutoff:])  # Employees on Site:
 
-nics1Name.append((cells[9].get_text())[15:])      # NAICS 1 Name:
+    sales.append((cells[6].get_text())[14:])      # Sales Volume:
 
-nics2.append((cells[10].get_text())[9:15])    # NAICS 2:
+    cutoff = (cells[7].get_text()).index("Year Started: ")
+    pub.append((cells[7].get_text())[16:cutoff])      # Public/Private:
+    cutoff = cutoff + 14
 
-nics2Name.append((cells[10].get_text())[15:])     # NAICS 2 Name:
+    year.append((cells[7].get_text())[cutoff:])       # Year Started:
 
-sic1.append((cells[11].get_text())[7:15])    # SIC 1:
+    cutoff = (cells[8].get_text()).index("Longitude: ")
+    lat.append((cells[8].get_text())[10:cutoff])       # Latitude:
+    cutoff = cutoff + 11
 
-sic1Name.append((cells[11].get_text())[15:])     # SIC 1 Name:
+    long.append((cells[8].get_text())[cutoff:])      # Longitude:
 
-sic2.append((cells[12].get_text())[7:15])    # SIC 2:
+    nics1.append((cells[9].get_text())[9:15])     # NAICS 1:
 
-sic2Name.append((cells[12].get_text())[15:])     # SIC 2 Name:
+    nics1Name.append((cells[9].get_text())[15:])      # NAICS 1 Name:
+
+    nics2.append((cells[10].get_text())[9:15])    # NAICS 2:
+
+    nics2Name.append((cells[10].get_text())[15:])     # NAICS 2 Name:
+
+    sic1.append((cells[11].get_text())[7:15])    # SIC 1:
+
+    sic1Name.append((cells[11].get_text())[15:])     # SIC 1 Name:
+
+    sic2.append((cells[12].get_text())[7:15])    # SIC 2:
+
+    sic2Name.append((cells[12].get_text())[15:])     # SIC 2 Name:
 
 
 
