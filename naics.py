@@ -3,7 +3,10 @@ from collections import namedtuple
 
 import pandas as pd
 import numpy as np
+
 import spacy
+from spacy.tokens import Doc
+from spacy.vocab import Vocab
 
 nlp = spacy.load('en_core_web_lg')
 
@@ -15,7 +18,7 @@ company_infos: List[CompanyInfo] = []
 for tup in pd.read_excel('NAICSData.xlsx').itertuples(name='CompanyInfo', index=False):
     company_infos.append(tup)
 
-cross_references: Dict[int, spacy.tokens.doc.Doc] = {}
+cross_references: Dict[int, Doc] = {}
 
 for tup in pd.read_excel('2017_NAICS_Cross_References.xlsx').itertuples():
-    cross_references[tup.Code] = nlp(tup.CrossReference)
+    cross_references[tup.Code] = Doc(Vocab()).from_disk(f'naics/{tup.Code}.sdoc')
