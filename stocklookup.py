@@ -47,6 +47,6 @@ def loadStocks(company):
         low.append(timeSeries[i]['3. low'])
         close.append(timeSeries[i]['4. close'])
         volume.append(timeSeries[i]['5. volume'])
-    print(open)
+    #print(open)
 
 loadStocks("Microsoft")
