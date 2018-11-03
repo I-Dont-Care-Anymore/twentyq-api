@@ -1,6 +1,12 @@
 from bs4 import BeautifulSoup
 from flask import Flask
 import requests
+
+import pandas as pd
+from pandas import ExcelWriter
+from pandas import ExcelFile
+import numpy as np
+
 app = Flask(__name__)
  
 #@app.route("/")
@@ -25,7 +31,7 @@ soup = BeautifulSoup(page.content, 'html.parser')
 desired = soup.find('table',  class_='companyDetail topCompanyDetail')
 cells = list(desired.children)
 
-compDUNS, corpName, tradeName, POC, title, addr, tele, totEmp, empSite, sales, pub, lat = []
+compDUNS, corpName, tradeName, POC, title, addr, tele, totEmp, empSite, sales, pub, year, lat = []
 long, nics1, nics1Name, nics2, nics2Name, sic1, sic1Name, sic2, sic2Name = []
 
 compDUNS.append((cells[0].get_text())[15:])      # Company DUNS#:
@@ -80,4 +86,33 @@ sic1Name.append((cells[11].get_text())[15:])     # SIC 1 Name:
 sic2.append((cells[12].get_text())[7:15])    # SIC 2:
 
 sic2Name.append((cells[12].get_text())[15:])     # SIC 2 Name:
-    
+
+
+
+df = pd.DataFrame({'Company DUNS#': compDUNS,
+                              'Corporate Name': corpName,
+                              'Tradestyle Name': tradeName,
+                              'Point of Contact': POC,
+                              'Title': title,
+                              'Address': addr,
+                              'Telephone': tele,
+                              'Total Employees': totEmp,
+                              'Employees On Site': empSite,
+                              'Sales Volume': sales,
+                              'Public/Private': pub,
+                              'Year Started': year,
+                              'Latitude': lat,
+                              'Longitude': long,
+                              'NAICS1': nics1,
+                              'NAICS1Name': nics1Name,
+                              'NAICS2': nics2,
+                              'NAICS2Name': nics2Name,
+                              'SIC1': sic1,
+                              'SIC1Name': sic1Name,
+                              'SIC2': sic2,
+                              'SIC2Name': sic2Name})
+
+ 
+writer = ExcelWriter('NAICSData.xlsx')
+df.to_excel(writer,'Sheet1', index = False)
+writer.save()
