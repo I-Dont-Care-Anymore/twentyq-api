@@ -22,7 +22,7 @@ Set-ExecutionPolicy AllSigned
 This one doesn't need to be admin
 
 ```powershell
-virtualenv .\env
+virtualenv .\env --python=python3
 .\env/bin/activate
 pip3 install -r requirements.txt
 python3 api.py
