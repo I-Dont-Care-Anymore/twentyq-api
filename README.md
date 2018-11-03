@@ -22,8 +22,10 @@ Set-ExecutionPolicy AllSigned
 This one doesn't need to be admin
 
 ```powershell
-virtualenv .env
-source .env/bin/activate
+virtualenv .\env
+.\env/bin/activate
 pip3 install requirements.txt
 python3 api.py
 ```
+
+![spongebob](spongebob.jpg)
