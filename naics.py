@@ -21,4 +21,5 @@ for tup in pd.read_excel('NAICSData.xlsx').itertuples(name='CompanyInfo', index=
 cross_references: Dict[int, Doc] = {}
 
 for tup in pd.read_excel('2017_NAICS_Cross_References.xlsx').itertuples():
-    cross_references[tup.Code] = Doc(Vocab()).from_disk(f'naics/{tup.Code}.sdoc')
+    cross_references[tup.Code] = Doc(
+        nlp.vocab).from_disk(f'naics/{tup.Code}.sdoc')
