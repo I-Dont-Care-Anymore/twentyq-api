@@ -7,7 +7,7 @@
 sudo apt-get install python3 python3-pip python3-virtualenv virtualenv
 virtualenv .env --python=python3
 source .env/bin/activate
-pip3 install requirements.txt
+pip3 install -r requirements.txt
 python3 api.py
 ```
 
@@ -24,7 +24,7 @@ This one doesn't need to be admin
 ```powershell
 virtualenv .\env
 .\env/bin/activate
-pip3 install requirements.txt
+pip3 install -r requirements.txt
 python3 api.py
 ```
 
