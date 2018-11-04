@@ -60,10 +60,11 @@ def question(number: int):
 
     if type(states[whoami]) == int:
         print(f'Completed session {whoami}')
-        del states[whoami]
-        return jsonify({
+        resp = jsonify({
             'answer': states[whoami]
         })
+        del states[whoami]
+        return resp
     else:
         print(f'Get question for session {whoami}')
         return jsonify({
