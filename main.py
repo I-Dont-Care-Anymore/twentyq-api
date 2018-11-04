@@ -5,6 +5,7 @@ from flask_cors import CORS
 import os
 from uuid import UUID, uuid4
 from lru import LRU
+import json
 
 from decisiontree import questions_tree, Node
 from naics import company_infos
@@ -29,7 +30,7 @@ def naics(number: int):
     for c in company_infos:
         if c.NAICS1 == number or c.NAICS2 == number:
             companies.append(c)
-    return jsonify(companies)
+    return json.dumps(companies)
 
 
 # Answer a question as no/not sure/yes
