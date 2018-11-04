@@ -36,18 +36,18 @@ class Node(object):
     def induct(self, index: int):
         if len(self.categories_tags_dict.keys()) == 0:
             return Node(max_depth=self.max_depth, attributes=self.attributes, categories_tags_dict=self.categories_tags_dict, value=-1, parent=self)
-        elif len(categories_tags_dict) == 1:
+        elif len(self.categories_tags_dict) == 1:
             # make the category the root
-            return Node(max_depth=self.max_depth, attributes=self.attributes, categories_tags_dict=self.categories_tags_dict, value=list(categories_tags_dict.keys())[0], parent=self)
+            return Node(max_depth=self.max_depth, attributes=self.attributes, categories_tags_dict=self.categories_tags_dict, value=list(self.categories_tags_dict.keys())[0], parent=self)
         # choose an arbitrary category because no more decisions can be made
         elif len(self.attributes) == 0 or len(attributes) - len(self.attributes) >= self.max_depth - 1:
-            return Node(max_depth=self.max_depth, attributes=self.attributes, categories_tags_dict=self.categories_tags_dict, value=random.choice(list(categories_tags_dict.keys())), parent=self)
+            return Node(max_depth=self.max_depth, attributes=self.attributes, categories_tags_dict=self.categories_tags_dict, value=random.choice(list(self.categories_tags_dict.keys())), parent=self)
         else:
             left: splitting_metrics.CategoryFreqs = {}
             right: splitting_metrics.CategoryFreqs = {}
 
             new_node_value = splitting_metrics.even(
-                self.attributes, categories_tags_dict, 0.75, left, right)
+                self.attributes, self.categories_tags_dict, 0.75, left, right)
 
             attributes_copy = self.attributes.copy()
             attributes_copy.remove(new_node_value)
