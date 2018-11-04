@@ -29,8 +29,7 @@ def answer(number: int):
         if request.method == 'PUT':
             print(f'Advance question for session {whoami}')
             if type(states[whoami]) == Node:
-                answer_json = request.get_json()
-                print(answer_json)
+                answer_json = request.get_json()['answer']
                 if answer_json == 'no':
                     index = 0
                 elif answer_json == 'not sure':
