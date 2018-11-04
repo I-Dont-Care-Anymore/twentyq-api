@@ -9,7 +9,7 @@ from lru import LRU
 from decisiontree import questions_tree, Node
 
 app = Flask(__name__)
-CORS(app, origins="twentyq.com", supports_credentials=True)
+CORS(app, supports_credentials=True)
 app.secret_key = os.urandom(24)
 app.config.update(SESSION_COOKIE_HTTPONLY=False,)
 
