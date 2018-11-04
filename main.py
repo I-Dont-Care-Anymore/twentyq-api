@@ -13,7 +13,7 @@ def index():
 # Answer a question as no/not sure/yes
 @app.route("/answer/<int:number>", methods=['PUT', 'DELETE'])
 def answer(number: int):
-    return
+    return ""
 
 
 @app.route("/question/<int:number>", methods=['GET'])
