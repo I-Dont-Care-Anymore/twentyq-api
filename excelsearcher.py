@@ -1,7 +1,8 @@
 #import stocklookup.py
 
 import pandas as pd
-import openpyxl
+from openpyxl.reader.excel import load_workbook
+import matplotlib.pyplot as plt
 
 def routine(number):
    # data = pd.read_excel("NAICSData.xlsx")
@@ -17,41 +18,78 @@ def routine(number):
     book = load_workbook(filename = "NAICSData.xlsx")
     sheet = book['Sheet1']
     compNum = 0
-    for row in range(2, 12500):
+    for row in range(2, 20):
         if compNum == 10:
             break
-        if (sheet['G' + str(row)].value) == number:
-            dictionary['comp' + str(compNum)] = sheet['C' + str(row)]
-            dictionary.update({'duns' + str(compNum) : sheet['B' + str(row)]},
-                             {'sEmp' + str(compNum) : sheet['D' + str(row)]},
-                             {'lat' + str(compNum) : sheet['E' + str(row)]},
-                             {'long' + str(compNum) : sheet['F' + str(row)]},
-                             {'sales' + str(compNum) : sheet['Q' + str(row)]},
-                             {'tEmp' + str(compNum) : sheet['T' + str(row)]},
-                             {'year' + str(compNum) : sheet['V' + str(row)]})
+        if (sheet.cell(row, 7)).value == str(number):
+
+            dictionary['comp' + str(compNum)] = sheet.cell(row, 3)
+            dictionary.update({'duns' + str(compNum) : sheet.cell(row, 2)})
+            dictionary.update({'sEmp' + str(compNum) : sheet.cell(row, 4)})
+            dictionary.update({'lat' + str(compNum) : sheet.cell(row, 5)})
+            dictionary.update({'long' + str(compNum) : sheet.cell(row, 6)})
+            dictionary.update({'sales' + str(compNum) : sheet.cell(row, 17)})
+            dictionary.update({'tEmp' + str(compNum) : sheet.cell(row, 20)})
+            dictionary.update({'year' + str(compNum) : sheet.cell(row, 22)})
             ++compNum
-        elif (sheet['I' + str(row)].value) == number:
-            dictionary['comp' + str(compNum)] = sheet['C' + str(row)]
-            dictionary.update({'duns' + str(compNum) : sheet['B' + str(row)]},
-                             {'sEmp' + str(compNum) : sheet['D' + str(row)]},
-                             {'lat' + str(compNum) : sheet['E' + str(row)]},
-                             {'long' + str(compNum) : sheet['F' + str(row)]},
-                             {'sales' + str(compNum) : sheet['Q' + str(row)]},
-                             {'tEmp' + str(compNum) : sheet['T' + str(row)]},
-                             {'year' + str(compNum) : sheet['V' + str(row)]})
+        elif sheet.cell(row, 7).value == str(number):
+            dictionary['comp' + str(compNum)] = sheet.cell(row, 3)
+            dictionary.update({'duns' + str(compNum) : sheet.cell(row, 2)})
+            dictionary.update({'sEmp' + str(compNum) : sheet.cell(row, 4)})
+            dictionary.update({'lat' + str(compNum) : sheet.cell(row, 5)})
+            dictionary.update({'long' + str(compNum) : sheet.cell(row, 6)})
+            dictionary.update({'sales' + str(compNum) : sheet.cell(row, 17)})
+            dictionary.update({'tEmp' + str(compNum) : sheet.cell(row, 20)})
+            dictionary.update({'year' + str(compNum) : sheet.cell(row, 22)})
             ++compNum
     book = load_workbook(filename = "audience1.xlsx")
     sheet = book['Sheet1']
     for row in range(2, 26):
-        if (sheet['A' + str(row)]) == (str(number))[0:2]:
-            dictionary.update({'SUPPLY' : sheet['C' + str(row)]},
-                             {'DRIVER' : sheet['D' + str(row)]},
-                             {'DEMAND' : sheet['E' + str(row)]},
-                             {'sec' : sheet['B' + str(row)]})
+        if (sheet.cell(row, 1)) == (str(number))[0:2]:
+            dictionary.update({'SUPPLY' : sheet.cell(row, 3)})
+            dictionary.update({'DRIVER' : sheet.cell(row, 4)})
+            dictionary.update({'DEMAND' : sheet.cell(row, 5)})
+            dictionary.update({'sec' : sheet.cell(row, 2)})
             break
+    #sector data
+    dataNum = 0
+    year = 7
+    sheet = book['Sheet1']
+    for i in range (7, 10):
+        book = load_workbook(filename = "naicssector_200" + str(i) + "parsed.xlsx")
+        for row in range (2, 8989):
+            if(dataNum == 10):
+                break
+            print(str(number)[:2])
+            if(sheet.cell(row, 2)).value == str(number)[:2]:
+                print("if entered")
+                dictionary.update({'FIRMS' + str(dataNum): sheet.cell(row, 4)})
+                dictionary.update({'ESTABLISHMENT' + str(dataNum): sheet.cell(row, 5)})
+                dictionary.update({'EMPLOYMENT' + str(dataNum): sheet.cell(row, 6)})
+                dictionary.update({'ANNUAL PAYROLL' + str(dataNum): sheet.cell(row, 7)})
+                ++dataNum
+    for i in range (10, 14):
+        book = load_workbook(filename = "naicssector_20" + str(i) + "parsed.xlsx")
+        for row in range (2, 8989):
+            if(dataNum == 10):
+                break
+
+            if(sheet.cell(row, 2)).value == str(number)[:2]:
+                dictionary.update({'FIRMS' + str(dataNum): sheet.cell(row, 4)})
+                dictionary.update({'ESTABLISHMENT' + str(dataNum): sheet.cell(row, 5)})
+                dictionary.update({'EMPLOYMENT' + str(dataNum): sheet.cell(row, 6)})
+                dictionary.update({'ANNUAL PAYROLL' + str(dataNum): sheet.cell(row, 7)})
+                ++dataNum
     return dictionary
 
+def drawGraphs(dict):
+        #df = pd.DataFrame([dict['EMPLOYMENT0'], dict['EMPLOYMENT1'], dict['EMPLOYMENT2'], dict['EMPLOYMENT3'], dict['EMPLOYMENT4'], dict['EMPLOYMENT5'], dict['EMPLOYMENT6']],
+                           #columns=list[2007, 2008, 2009, 2010, 2011, 2012, 2013])
+
+        f = plt.figure
+        plt.plot([2007, 2008, 2009, 2010, 2011, 2012, 2013], [dict['EMPLOYMENT0'], dict['EMPLOYMENT1'], dict['EMPLOYMENT2'], dict['EMPLOYMENT3'], dict['EMPLOYMENT4'], dict['EMPLOYMENT5'], dict['EMPLOYMENT6']])
+
+        f.savefig("test.html", bbox_inches='tight')
     
-
-
-#routine(331313)
+#dictionary = routine(541199)
+#drawGraphs(dictionary)
