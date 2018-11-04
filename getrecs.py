@@ -15,11 +15,11 @@ def getRelevantInformation(queryString):
 
 	for v in getRelatedArticles(queryString)["articles"]:
 		url_string = v["url"]
-		article_results.append({url_string : getSnapshot(url_string)}) 
+		article_results.append({"title": v["title"], url_string : getSnapshot(url_string)}) 
 
 	for v in getRelatedBingResults(queryString)["webPages"]["value"]:
 		url_string = v["url"]
-		search_results.append({url_string : getSnapshot(url_string)}) 
+		search_results.append({"title": v["name"], url_string : getSnapshot(url_string)}) 
 
 	urls['articles'] = article_results[:5]
 	urls['searches'] = search_results
@@ -57,3 +57,6 @@ def getSnapshot(url, thumb_width = 400):
     hmacToken = hmac.new(apiSecret, queryString, sha1)
     token = hmacToken.digest().encode('hex')
     return "https://api.urlbox.io/v1/%s/%s/png?%s" % (apiKey, token, queryString)
+
+
+print(getRelevantInformation("trump"))
