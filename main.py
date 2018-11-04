@@ -28,7 +28,7 @@ def answer(number: int):
         whoami: UUID = session['whoami']
         if request.method == 'PUT':
             print(f'Advance question for session {whoami}')
-            if type(states[whoami]) == Node:
+            if type(states[whoami]) != int:
                 answer_json = request.get_json()['answer']
                 if answer_json == 'no':
                     index = 0
@@ -58,11 +58,11 @@ def question(number: int):
     if whoami not in states:
         states[whoami] = questions_tree.root
 
-    if type(states[whoami].value) == int:
+    if type(states[whoami]) == int:
         print(f'Completed session {whoami}')
-        del states[whoami].value
+        del states[whoami]
         return jsonify({
-            'answer': states[whoami].value
+            'answer': states[whoami]
         })
     else:
         print(f'Get question for session {whoami}')
