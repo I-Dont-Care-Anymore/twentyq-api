@@ -11,7 +11,7 @@ MetricCallable = Callable[[
 def even(attributes: Attributes, categories_tags_dict: CategoryFreqs, threshold: float, left: CategoryFreqs, right: CategoryFreqs) -> str:
     # compute the best metric
     tag_frequencies: Dict[str, int] = {}  # map frequencies of tags
-    distance: float = 0.5 * len(categories_tags_dict)
+    distance: float = 0.25 * len(categories_tags_dict)
 
     tag_value_map: TagSimilarity
     for tag_value_map in categories_tags_dict.values():  # list of all attributes and values
