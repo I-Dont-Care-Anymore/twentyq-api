@@ -3,12 +3,16 @@ from flask import Flask, session, request, jsonify
 from flask_cors import CORS
 import os
 
+from naics import cross_references, company_infos
+
 app = Flask(__name__)
 CORS(app)
+
 
 @app.route("/")
 def index():
     return "Hello, World!"
+
 
 # Answer a question as no/not sure/yes
 @app.route("/answer/<int:number>", methods=['PUT', 'DELETE'])
