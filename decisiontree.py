@@ -79,7 +79,7 @@ attributes: Dict[str, Token] = {}
 
 for code, doc in cross_references.items():
     for token in doc:
-        if token.tag_ == 'NNPS' or token.tag_ == 'NNP' or token.tag_ == 'NN' or token.tag_ == 'VB':
+        if token.tag_ == 'NNPS' or token.tag_ == 'NNP' or token.tag_ == 'VB':
             attributes[token.lemma_] = token
 
 categories_tags_dict: splitting_metrics.CategoryFreqs = {}
