@@ -29,7 +29,7 @@ def naics(number: int):
     companies = []
     for c in company_infos:
         if c.NAICS1 == number or c.NAICS2 == number:
-            companies.append(c)
+            companies.append(c._asdict())
     return json.dumps(companies)
 
 
