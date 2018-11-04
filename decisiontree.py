@@ -49,6 +49,7 @@ class Node(object):
             new_node_value = splitting_metrics.even(attributes, categories_tags_dict, 0.5, left, right)
 
             attributes_copy = self.attributes.copy()
+            print(f'NODE VALUE IS {new_node_value}')
             attributes_copy.remove(new_node_value)
 
             if index == 0:
