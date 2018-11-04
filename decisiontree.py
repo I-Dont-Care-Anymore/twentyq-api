@@ -47,7 +47,7 @@ class Node(object):
             right: splitting_metrics.CategoryFreqs = {}
 
             new_node_value = splitting_metrics.even(
-                self.attributes, self.categories_tags_dict, 0.75, left, right)
+                self.attributes, self.categories_tags_dict, 0.5, left, right)
 
             attributes_copy = self.attributes.copy()
             attributes_copy.remove(new_node_value)
