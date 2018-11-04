@@ -1,3 +1,7 @@
+from bs4 import BeautifulSoup
+import sys
+import requests
+
 import pandas as pd
 from pandas import ExcelWriter
 from pandas import ExcelFile
