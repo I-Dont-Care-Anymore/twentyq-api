@@ -53,14 +53,14 @@ def question(number: int):
 
     if whoami not in states:
         states[whoami] = questions_tree.root
-
-    if type(states[whoami].value) == Node:
+        
+    if type(states[whoami].value) == int:
         return jsonify({
-            'question': f'Is your idea related to {states[whoami].value}?'
+            'answer': states[whoami].value
         })
     else:
         return jsonify({
-            'answer': states[whoami].value
+            'question': f'Is your idea related to {states[whoami].value}?'
         })
 
 
