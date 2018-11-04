@@ -2,7 +2,6 @@
 
 import pandas as pd
 from openpyxl.reader.excel import load_workbook
-import matplotlib.pyplot as plt
 
 def routine(number):
    # data = pd.read_excel("NAICSData.xlsx")
@@ -81,14 +80,6 @@ def routine(number):
                 ++dataNum
     return dictionary
 
-def drawGraphs(dict):
-        #df = pd.DataFrame([dict['EMPLOYMENT0'], dict['EMPLOYMENT1'], dict['EMPLOYMENT2'], dict['EMPLOYMENT3'], dict['EMPLOYMENT4'], dict['EMPLOYMENT5'], dict['EMPLOYMENT6']],
-                           #columns=list[2007, 2008, 2009, 2010, 2011, 2012, 2013])
-
-        f = plt.figure
-        plt.plot([2007, 2008, 2009, 2010, 2011, 2012, 2013], [dict['EMPLOYMENT0'], dict['EMPLOYMENT1'], dict['EMPLOYMENT2'], dict['EMPLOYMENT3'], dict['EMPLOYMENT4'], dict['EMPLOYMENT5'], dict['EMPLOYMENT6']])
-
-        f.savefig("test.html", bbox_inches='tight')
     
 dictionary = routine(541199)
 print(dictionary['SUPPLY'])
