@@ -20,7 +20,7 @@ from typing import List, Dict
 import random
 import splitting_metrics
 
-from naics import cross_references
+from naics import definitions
 from spacy.tokens import Token
 
 
@@ -77,7 +77,7 @@ class TreeClassifier(object):
 
 attributes: Dict[str, Token] = {}
 
-for code, doc in cross_references.items():
+for code, doc in definitions.items():
     for token in doc:
         if token.tag_ == 'NNPS' or token.tag_ == 'NNP' or token.tag_ == 'VB':
             attributes[token.lemma_] = token
@@ -85,7 +85,7 @@ for code, doc in cross_references.items():
 categories_tags_dict: splitting_metrics.CategoryFreqs = {}
 print(f'There are {len(attributes)} attributes')
 
-for code, doc in cross_references.items():
+for code, doc in definitions.items():
     tag_freqs: splitting_metrics.TagSimilarity = {}
     for token_lemma, token in attributes.items():
         tag_freqs[token_lemma] = token.similarity(doc)
