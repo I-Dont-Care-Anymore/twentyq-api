@@ -20,9 +20,11 @@ company_infos: List[CompanyInfo] = []
 for tup in pd.read_excel('NAICSData.xlsx').itertuples(name='CompanyInfo', index=False):
     company_infos.append(tup)
 
-# NLP analyses of cross references
-cross_references: Dict[int, Doc] = {}
+names: Dict[int, str] = {}
+definitions: Dict[int, Doc] = {}
 
-for tup in pd.read_excel('2017_NAICS_Cross_References.xlsx').itertuples():
-    cross_references[tup.Code] = Doc(
-        nlp.vocab).from_disk(f'naics/{tup.Code}.sdoc')
+for tup in pd.read_excel('2017_NAICS_Descriptions.xlsx').itertuples():
+    names[tup.Code] = tup.Title
+    if type(tup.Description) != str:
+        continue
+    definitions[tup.Code] = Doc(nlp.vocab).from_disk(f'naics/{tup.Code}.sdoc')
