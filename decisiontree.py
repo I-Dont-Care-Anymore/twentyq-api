@@ -40,7 +40,7 @@ class Node(object):
             # make the category the root
             return Node(max_depth=self.max_depth, attributes=self.attributes, categories_tags_dict=self.categories_tags_dict, value=list(categories_tags_dict.keys())[0], parent=self)
         # choose an arbitrary category because no more decisions can be made
-        elif len(self.attributes) == 0 or len(self.attributes) - len(self.attributes) >= self.max_depth - 1:
+        elif len(self.attributes) == 0 or len(attributes) - len(self.attributes) >= self.max_depth - 1:
             return Node(max_depth=self.max_depth, attributes=self.attributes, categories_tags_dict=self.categories_tags_dict, value=random.choice(list(categories_tags_dict.keys())), parent=self)
         else:
             left: splitting_metrics.CategoryFreqs = {}
@@ -73,22 +73,22 @@ class TreeClassifier(object):
         ), categories_tags_dict=categories_tags_dict, value=root_value, parent=None)
 
 
-attrs: Dict[str, Token] = {}
+attributes: Dict[str, Token] = {}
 
 for code, doc in cross_references.items():
     for token in doc:
-        if token.tag_ == 'NNPS' or token.tag_ == 'NNP' or (token.tag_ == 'NN' and token.shape_ == 'Xxxxx') or token.tag_ == 'VB':
-            attrs[token.norm_] = token
+        if token.tag_ == 'NNPS' or token.tag_ == 'NNP' or token.tag_ == 'NN' or token.tag_ == 'VB':
+            attributes[token.norm_] = token
 
 categories_tags_dict: splitting_metrics.CategoryFreqs = {}
-print(f'There are {len(attrs)} attributes')
+print(f'There are {len(attributes)} attributes')
 
 for code, doc in cross_references.items():
     tag_freqs: splitting_metrics.TagSimilarity = {}
-    for token_norm, token in attrs.items():
+    for token_norm, token in attributes.items():
         tag_freqs[token_norm] = token.similarity(doc)
     categories_tags_dict[code] = tag_freqs
 
 
 questions_tree = TreeClassifier(
-    [token_norm for token_norm in attrs.keys()], categories_tags_dict, max_depth=10)
+    [token_norm for token_norm in attributes.keys()], categories_tags_dict, max_depth=20)
