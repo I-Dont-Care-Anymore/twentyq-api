@@ -8,7 +8,7 @@ from lru import LRU
 import json
 
 from decisiontree import questions_tree, Node
-from naics import company_infos
+from naics import company_infos, names
 from converter import passNAICS
 
 app = Flask(__name__)
@@ -30,7 +30,7 @@ def naics(number: int):
     for c in company_infos:
         if c.NAICS1 == number or c.NAICS2 == number:
             companies.append({'CorporateName': c.CorporateName, 'SalesVolume': c.SalesVolume })
-    return jsonify(companies)
+    return jsonify({'companies': companies, 'name': names[number]})
 
 
 # Answer a question as no/not sure/yes
