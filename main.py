@@ -6,7 +6,7 @@ import os
 from uuid import UUID, uuid4
 from lru import LRU
 
-from decisiontree import questions_tree, Node
+from decisiontree2 import questions_tree, Node
 from converter import passNAICS
 
 app = Flask(__name__)
