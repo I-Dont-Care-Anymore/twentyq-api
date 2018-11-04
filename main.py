@@ -11,7 +11,7 @@ from decisiontree import questions_tree, Node
 app = Flask(__name__)
 CORS(app, supports_credentials=True)
 app.secret_key = os.urandom(24)
-app.config.update(SESSION_COOKIE_HTTPONLY=False,)
+app.config.update(SESSION_COOKIE_HTTPONLY=False, SESSION_COOKIE_SECURE=True)
 
 states: Dict[UUID, Union[Node, int]] = LRU(10000)
 
