@@ -6,7 +6,8 @@ import os
 from uuid import UUID, uuid4
 from lru import LRU
 
-from decisiontree2 import questions_tree, Node
+from decisiontree import questions_tree, Node
+from naics import company_infos
 from converter import passNAICS
 
 app = Flask(__name__)
@@ -24,7 +25,11 @@ def index():
 
 @app.route("/naics/<int:number>", methods=['GET'])
 def naics(number: int):
-    return jsonify(passNAICS(number))
+    companies = []
+    for c in company_infos:
+        if c.NAICS1 == number or c.NAICS2 == number:
+            companies.append(c)
+    return jsonify(companies)
 
 
 # Answer a question as no/not sure/yes
