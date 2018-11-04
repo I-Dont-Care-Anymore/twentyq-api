@@ -10,7 +10,7 @@ from decisiontree import questions_tree, Node
 
 app = Flask(__name__)
 CORS(app)
-
+app.secret_key = os.urandom(24)
 
 states: Dict[UUID, Union[Node, int]] = LRU(10000)
 
@@ -65,5 +65,4 @@ def question(number: int):
 
 
 if __name__ == "__main__":
-    app.secret_key = os.urandom(16)
     app.run()
