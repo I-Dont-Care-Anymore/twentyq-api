@@ -66,7 +66,9 @@ class TreeClassifier(object):
         self.attributes = attributes
         self.categories_tags = categories_tags_dict
         self.split_metric = split_metric
-        self.root = Node(max_depth=max_depth, attributes=attributes, categories_tags_dict=categories_tags_dict, value=-1, parent=None).induct(1)
+        root_value = splitting_metrics.even(attributes, categories_tags_dict, 0.5, {}, {})
+        attributes.remove(root_value)
+        self.root = Node(max_depth=max_depth, attributes=attributes, categories_tags_dict=categories_tags_dict, value=root_value), parent=None)
 
     def print_tree(self):
         print(self.root)
