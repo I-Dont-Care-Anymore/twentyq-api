@@ -8,18 +8,23 @@ from pandas import ExcelFile
 import numpy as np
 
 
-for i in range(200, 202) :
+for i in range(15, 17) :
     url = "https://clients1.ibisworld.com/reports/us/industry/default.aspx?entid=" + str (i)
     page = requests.get(url)
 
     if page.url == url:
         continue
 
+    sys.stdout.write(str(i) + " ")
+    sys.stdout.flush()
+
     soup = BeautifulSoup(page.content, 'html.parser')
 
-    desired = soup.find('div', class_="Industry_SupplyChain")
+    desired = soup.find_all("Industry_SupplyChain_KeyEconmicDrivers")
 
-    print(desired.prettify())
+    for p in desired:
+        print(p.prettify())
+  
 
 
 
