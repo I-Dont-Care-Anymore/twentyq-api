@@ -96,4 +96,4 @@ for code, doc in cross_references.items():
     categories_tags_dict[code] = tag_freqs
 
 questions_tree = TreeClassifier(
-    [token_norm for token_norm in attributes.keys()], categories_tags_dict, max_depth=15)
+    [token_norm for token_norm in attributes.keys()], categories_tags_dict, max_depth=10)
