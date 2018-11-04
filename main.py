@@ -9,9 +9,9 @@ from lru import LRU
 from decisiontree import questions_tree, Node
 
 app = Flask(__name__)
-CORS(app)
+CORS(app, supports_credentials=True)
 app.secret_key = os.urandom(24)
-app.config.update(SESSION_COOKIE_HTTPONLY=False,)
+app.config.update(SESSION_COOKIE_HTTPONLY=False, SESSION_COOKIE_SECURE=True)
 
 states: Dict[UUID, Union[Node, int]] = LRU(10000)
 
@@ -28,15 +28,15 @@ def answer(number: int):
         whoami: UUID = session['whoami']
         if request.method == 'PUT':
             print(f'Advance question for session {whoami}')
-            if type(states[whoami]) == Node:
-                answer_json = request.get_json()
+            if type(states[whoami]) != int:
+                answer_json = request.get_json()['answer']
                 if answer_json == 'no':
                     index = 0
                 elif answer_json == 'not sure':
                     index = 1
                 elif answer_json == 'yes':
                     index = 2
-                states[whoami] = states[whoami].children[index]
+                states[whoami] = states[whoami].induct(index)
                 if type(states[whoami].value) == int:
                     states[whoami] = states[whoami].value
         elif request.method == 'DELETE':
@@ -58,12 +58,13 @@ def question(number: int):
     if whoami not in states:
         states[whoami] = questions_tree.root
 
-    if type(states[whoami].value) == int:
+    if type(states[whoami]) == int:
         print(f'Completed session {whoami}')
-        del states[whoami].value
-        return jsonify({
-            'answer': states[whoami].value
+        resp = jsonify({
+            'classification': states[whoami]
         })
+        del states[whoami]
+        return resp
     else:
         print(f'Get question for session {whoami}')
         return jsonify({

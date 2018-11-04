@@ -26,73 +26,71 @@ from spacy.tokens import Token
 
 class Node(object):
 
-    def __init__(self, value: int, parent, children: List = []):
-        self.value = value
-        self.parent = parent
-        self.children = children
-
-    def __repr__(self, level=0):
-        ret = "\t"*level+repr(self.value)+"\n"
-        for child in self.children:
-            ret += child.__repr__(level+1)
-        return ret
-
-
-class TreeClassifier(object):
-
-    def __init__(self, attributes: splitting_metrics.Attributes, categories_tags_dict: splitting_metrics.CategoryFreqs, max_depth: int, split_metric: splitting_metrics.MetricCallable = splitting_metrics.even):
+    def __init__(self, max_depth: int, attributes: splitting_metrics.Attributes, categories_tags_dict: splitting_metrics.CategoryFreqs, value: int, parent):
         self.max_depth = max_depth
         self.attributes = attributes
-        self.categories_tags = categories_tags_dict
-        self.split_metric = split_metric
-        self.root = self.induct_tree(
-            self.attributes.copy(), self.categories_tags, None)
+        self.categories_tags_dict = categories_tags_dict
+        self.value = value
+        self.parent = parent
 
-    def induct_tree(self, attributes: splitting_metrics.Attributes, categories_tags_dict: splitting_metrics.CategoryFreqs, parent: Node) -> Node:
-        if len(categories_tags_dict.keys()) == 0:
-            return Node(-1, parent)
-        elif len(categories_tags_dict) == 1:
+    def induct(self, index: int):
+        if len(self.categories_tags_dict.keys()) == 0:
+            return Node(max_depth=self.max_depth, attributes=self.attributes, categories_tags_dict=self.categories_tags_dict, value=-1, parent=self)
+        elif len(self.categories_tags_dict) == 1:
             # make the category the root
-            return Node(list(categories_tags_dict.keys())[0], parent)
+            return Node(max_depth=self.max_depth, attributes=self.attributes, categories_tags_dict=self.categories_tags_dict, value=list(self.categories_tags_dict.keys())[0], parent=self)
         # choose an arbitrary category because no more decisions can be made
-        elif len(attributes) == 0 or len(self.attributes) - len(attributes) >= self.max_depth - 1:
-            return Node(random.choice(list(categories_tags_dict.keys())), parent)
+        elif len(self.attributes) == 0 or len(attributes) - len(self.attributes) >= self.max_depth - 1:
+            return Node(max_depth=self.max_depth, attributes=self.attributes, categories_tags_dict=self.categories_tags_dict, value=random.choice(list(self.categories_tags_dict.keys())), parent=self)
         else:
             left: splitting_metrics.CategoryFreqs = {}
             right: splitting_metrics.CategoryFreqs = {}
 
-            new_node_value = self.split_metric(
-                attributes, categories_tags_dict, 0.5, left, right)
+            new_node_value = splitting_metrics.even(
+                self.attributes, self.categories_tags_dict, 0.25, left, right)
 
-            attributes_copy = attributes.copy()
+            attributes_copy = self.attributes.copy()
             attributes_copy.remove(new_node_value)
 
-            new_node: Node = Node(new_node_value, parent)
-            new_node.children = [self.induct_tree(attributes_copy, left, new_node),
-                                 self.induct_tree(
-                attributes_copy, categories_tags_dict, new_node),
-                self.induct_tree(attributes_copy, right, new_node)]
-            return new_node
+            if index == 0:
+                new_categories_tags_dict = left
+                print(f'Eliminated {len(right)}, {len(left)} left')
+            elif index == 1:
+                new_categories_tags_dict = self.categories_tags_dict
+            elif index == 2:
+                new_categories_tags_dict = right
+                print(f'Eliminated {len(left)}, {len(right)} left')
+            return Node(max_depth=self.max_depth, attributes=attributes_copy, categories_tags_dict=new_categories_tags_dict, value=new_node_value, parent=self)
 
-    def print_tree(self):
-        print(self.root)
+
+class TreeClassifier(object):
+
+    def __init__(self, attributes: splitting_metrics.Attributes, categories_tags_dict: splitting_metrics.CategoryFreqs, max_depth: int):
+        root_value = splitting_metrics.even(
+            attributes, categories_tags_dict, 0.25, {}, {})
+        attributes.remove(root_value)
+        for tag_value_map in categories_tags_dict.values():
+            tag_value_map.pop(root_value)
+        self.root = Node(max_depth=max_depth, attributes=attributes.copy(
+        ), categories_tags_dict=categories_tags_dict, value=root_value, parent=None)
 
 
 attributes: Dict[str, Token] = {}
 
 for code, doc in cross_references.items():
     for token in doc:
-        if token.pos_ == 'VERB' or token.pos_ == 'NOUN':
-            attributes[token.norm_] = token
+        if token.tag_ == 'NNPS' or token.tag_ == 'NNP' or token.tag_ == 'NN' or token.tag_ == 'VB':
+            attributes[token.lemma_] = token
 
 categories_tags_dict: splitting_metrics.CategoryFreqs = {}
 print(f'There are {len(attributes)} attributes')
 
 for code, doc in cross_references.items():
     tag_freqs: splitting_metrics.TagSimilarity = {}
-    for token_norm, token in attributes.items():
-        tag_freqs[token_norm] = token.similarity(doc)
+    for token_lemma, token in attributes.items():
+        tag_freqs[token_lemma] = token.similarity(doc)
     categories_tags_dict[code] = tag_freqs
 
+
 questions_tree = TreeClassifier(
-    [token_norm for token_norm in attributes.keys()], categories_tags_dict, max_depth=10)
+    [token_lemma for token_lemma in attributes.keys()], categories_tags_dict, max_depth=20)

@@ -22,7 +22,7 @@ def even(attributes: Attributes, categories_tags_dict: CategoryFreqs, threshold:
                 else:
                     tag_frequencies[tag] = 1
 
-    best_tag: str = max(tag_frequencies.items(),
+    best_tag: str = min(tag_frequencies.items(),
                         key=lambda tup: abs(tup[1] - distance))[0]
 
     category: int
