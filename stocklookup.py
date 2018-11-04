@@ -49,4 +49,9 @@ def loadStocks(company):
         volume.append(timeSeries[i]['5. volume'])
     #print(open)
 
-loadStocks("Microsoft")
+#loadStocks("Microsoft")
+
+def jsonStocks(company):
+    return stockLookup(symbolLookup(company))
+
+
