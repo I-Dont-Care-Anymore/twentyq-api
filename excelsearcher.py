@@ -23,33 +23,33 @@ def routine(number):
             break
         if (sheet.cell(row, 7)).value == str(number):
 
-            dictionary['comp' + str(compNum)] = sheet.cell(row, 3)
-            dictionary.update({'duns' + str(compNum) : sheet.cell(row, 2)})
-            dictionary.update({'sEmp' + str(compNum) : sheet.cell(row, 4)})
-            dictionary.update({'lat' + str(compNum) : sheet.cell(row, 5)})
-            dictionary.update({'long' + str(compNum) : sheet.cell(row, 6)})
-            dictionary.update({'sales' + str(compNum) : sheet.cell(row, 17)})
-            dictionary.update({'tEmp' + str(compNum) : sheet.cell(row, 20)})
-            dictionary.update({'year' + str(compNum) : sheet.cell(row, 22)})
+            dictionary['comp' + str(compNum)] = sheet.cell(row, 3).value
+            dictionary.update({'duns' + str(compNum) : sheet.cell(row, 2).value})
+            dictionary.update({'sEmp' + str(compNum) : sheet.cell(row, 4).value})
+            dictionary.update({'lat' + str(compNum) : sheet.cell(row, 5).value})
+            dictionary.update({'long' + str(compNum) : sheet.cell(row, 6).value})
+            dictionary.update({'sales' + str(compNum) : sheet.cell(row, 17).value})
+            dictionary.update({'tEmp' + str(compNum) : sheet.cell(row, 20).value})
+            dictionary.update({'year' + str(compNum) : sheet.cell(row, 22).value})
             ++compNum
-        elif sheet.cell(row, 7).value == str(number):
-            dictionary['comp' + str(compNum)] = sheet.cell(row, 3)
-            dictionary.update({'duns' + str(compNum) : sheet.cell(row, 2)})
-            dictionary.update({'sEmp' + str(compNum) : sheet.cell(row, 4)})
-            dictionary.update({'lat' + str(compNum) : sheet.cell(row, 5)})
-            dictionary.update({'long' + str(compNum) : sheet.cell(row, 6)})
-            dictionary.update({'sales' + str(compNum) : sheet.cell(row, 17)})
-            dictionary.update({'tEmp' + str(compNum) : sheet.cell(row, 20)})
-            dictionary.update({'year' + str(compNum) : sheet.cell(row, 22)})
+        elif (sheet.cell(row, 7)).value == str(number):
+            dictionary['comp' + str(compNum)] = sheet.cell(row, 3).value
+            dictionary.update({'duns' + str(compNum) : sheet.cell(row, 2).value})
+            dictionary.update({'sEmp' + str(compNum) : sheet.cell(row, 4).value})
+            dictionary.update({'lat' + str(compNum) : sheet.cell(row, 5).value})
+            dictionary.update({'long' + str(compNum) : sheet.cell(row, 6).value})
+            dictionary.update({'sales' + str(compNum) : sheet.cell(row, 17).value})
+            dictionary.update({'tEmp' + str(compNum) : sheet.cell(row, 20).value})
+            dictionary.update({'year' + str(compNum) : sheet.cell(row, 22).value})
             ++compNum
     book = load_workbook(filename = "audience1.xlsx")
     sheet = book['Sheet1']
     for row in range(2, 26):
-        if (sheet.cell(row, 1)) == (str(number))[0:2]:
-            dictionary.update({'SUPPLY' : sheet.cell(row, 3)})
-            dictionary.update({'DRIVER' : sheet.cell(row, 4)})
-            dictionary.update({'DEMAND' : sheet.cell(row, 5)})
-            dictionary.update({'sec' : sheet.cell(row, 2)})
+        if (sheet.cell(row, 1)).value == int((str(number))[0:2]):
+            dictionary.update({'SUPPLY' : sheet.cell(row, 3).value})
+            dictionary.update({'DRIVER' : sheet.cell(row, 4).value})
+            dictionary.update({'DEMAND' : sheet.cell(row, 5).value})
+            dictionary.update({'sec' : sheet.cell(row, 2).value})
             break
     #sector data
     dataNum = 0
@@ -57,11 +57,12 @@ def routine(number):
     sheet = book['Sheet1']
     for i in range (7, 10):
         book = load_workbook(filename = "naicssector_200" + str(i) + "parsed.xlsx")
-        for row in range (2, 8989):
+        for row in range (2, 200):
             if(dataNum == 10):
                 break
-            print(str(number)[:2])
-            if(sheet.cell(row, 2)).value == str(number)[:2]:
+            #print(sheet.cell(row, 1).value)
+            #print(str(number)[:2])
+            if(sheet.cell(row, 1)).value == str(number)[:2]:
                 print("if entered")
                 dictionary.update({'FIRMS' + str(dataNum): sheet.cell(row, 4)})
                 dictionary.update({'ESTABLISHMENT' + str(dataNum): sheet.cell(row, 5)})
@@ -70,11 +71,11 @@ def routine(number):
                 ++dataNum
     for i in range (10, 14):
         book = load_workbook(filename = "naicssector_20" + str(i) + "parsed.xlsx")
-        for row in range (2, 8989):
+        for row in range (2, 200):
             if(dataNum == 10):
                 break
 
-            if(sheet.cell(row, 2)).value == str(number)[:2]:
+            if(sheet.cell(row, 1)).value == str(number)[:2]:
                 dictionary.update({'FIRMS' + str(dataNum): sheet.cell(row, 4)})
                 dictionary.update({'ESTABLISHMENT' + str(dataNum): sheet.cell(row, 5)})
                 dictionary.update({'EMPLOYMENT' + str(dataNum): sheet.cell(row, 6)})
@@ -91,5 +92,7 @@ def drawGraphs(dict):
 
         f.savefig("test.html", bbox_inches='tight')
     
-#dictionary = routine(541199)
+dictionary = routine(314110)
+print(dictionary['duns0'])
+print(dictionary['lat0'])
 #drawGraphs(dictionary)
