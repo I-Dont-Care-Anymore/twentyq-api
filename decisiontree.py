@@ -47,19 +47,19 @@ class Node(object):
             right: splitting_metrics.CategoryFreqs = {}
 
             new_node_value = splitting_metrics.even(
-                self.attributes, categories_tags_dict, 0.5, left, right)
+                self.attributes, categories_tags_dict, 0.75, left, right)
 
             attributes_copy = self.attributes.copy()
             attributes_copy.remove(new_node_value)
 
             if index == 0:
                 new_categories_tags_dict = left
-                print(f'Eliminated {right}')
+                print(f'Eliminated {len(right)}, {len(left)} left')
             elif index == 1:
                 new_categories_tags_dict = self.categories_tags_dict
             elif index == 2:
                 new_categories_tags_dict = right
-                print(f'Eliminated {left.keys()}')
+                print(f'Eliminated {len(left)}, {len(right)} left')
             return Node(max_depth=self.max_depth, attributes=attributes_copy, categories_tags_dict=new_categories_tags_dict, value=new_node_value, parent=self)
 
 
@@ -67,7 +67,7 @@ class TreeClassifier(object):
 
     def __init__(self, attributes: splitting_metrics.Attributes, categories_tags_dict: splitting_metrics.CategoryFreqs, max_depth: int):
         root_value = splitting_metrics.even(
-            attributes, categories_tags_dict, 0.5, {}, {})
+            attributes, categories_tags_dict, 0.75, {}, {})
         attributes.remove(root_value)
         for tag_value_map in categories_tags_dict.values():
             tag_value_map.pop(root_value)
