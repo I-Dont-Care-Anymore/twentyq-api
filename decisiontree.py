@@ -67,7 +67,7 @@ class TreeClassifier(object):
 
     def __init__(self, attributes: splitting_metrics.Attributes, categories_tags_dict: splitting_metrics.CategoryFreqs, max_depth: int):
         root_value = splitting_metrics.even(
-            attributes, categories_tags_dict, 0.75, {}, {})
+            attributes, categories_tags_dict, 0.5, {}, {})
         attributes.remove(root_value)
         for tag_value_map in categories_tags_dict.values():
             tag_value_map.pop(root_value)
