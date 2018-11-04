@@ -40,13 +40,14 @@ class Node(object):
             # make the category the root
             return Node(max_depth=self.max_depth, attributes=self.attributes, categories_tags_dict=self.categories_tags_dict, value=list(categories_tags_dict.keys())[0], parent=self)
         # choose an arbitrary category because no more decisions can be made
-        elif len(attributes) == 0 or len(self.attributes) - len(attributes) >= self.max_depth - 1:
+        elif len(self.attributes) == 0 or len(self.attributes) - len(self.attributes) >= self.max_depth - 1:
             return Node(max_depth=self.max_depth, attributes=self.attributes, categories_tags_dict=self.categories_tags_dict, value=random.choice(list(categories_tags_dict.keys())), parent=self)
         else:
             left: splitting_metrics.CategoryFreqs = {}
             right: splitting_metrics.CategoryFreqs = {}
 
-            new_node_value = splitting_metrics.even(attributes, categories_tags_dict, 0.5, left, right)
+            new_node_value = splitting_metrics.even(
+                self.attributes, categories_tags_dict, 0.5, left, right)
 
             attributes_copy = self.attributes.copy()
             attributes_copy.remove(new_node_value)
@@ -63,29 +64,31 @@ class Node(object):
 class TreeClassifier(object):
 
     def __init__(self, attributes: splitting_metrics.Attributes, categories_tags_dict: splitting_metrics.CategoryFreqs, max_depth: int):
-        root_value = splitting_metrics.even(attributes, categories_tags_dict, 0.5, {}, {})
+        root_value = splitting_metrics.even(
+            attributes, categories_tags_dict, 0.5, {}, {})
         attributes.remove(root_value)
         for tag_value_map in categories_tags_dict.values():
             tag_value_map.pop(root_value)
-        self.root = Node(max_depth=max_depth, attributes=attributes, categories_tags_dict=categories_tags_dict, value=root_value, parent=None)
+        self.root = Node(max_depth=max_depth, attributes=attributes.copy(
+        ), categories_tags_dict=categories_tags_dict, value=root_value, parent=None)
 
 
-attributes: Dict[str, Token] = {}
+attrs: Dict[str, Token] = {}
 
 for code, doc in cross_references.items():
     for token in doc:
         if token.tag_ == 'NNPS' or token.tag_ == 'NNP' or (token.tag_ == 'NN' and token.shape_ == 'Xxxxx') or token.tag_ == 'VB':
-            attributes[token.norm_] = token
+            attrs[token.norm_] = token
 
 categories_tags_dict: splitting_metrics.CategoryFreqs = {}
-print(f'There are {len(attributes)} attributes')
+print(f'There are {len(attrs)} attributes')
 
 for code, doc in cross_references.items():
     tag_freqs: splitting_metrics.TagSimilarity = {}
-    for token_norm, token in attributes.items():
+    for token_norm, token in attrs.items():
         tag_freqs[token_norm] = token.similarity(doc)
     categories_tags_dict[code] = tag_freqs
 
 
 questions_tree = TreeClassifier(
-    [token_norm for token_norm in attributes.keys()], categories_tags_dict, max_depth=10)
+    [token_norm for token_norm in attrs.keys()], categories_tags_dict, max_depth=10)
