@@ -36,7 +36,7 @@ def answer(number: int):
                     index = 1
                 elif answer_json == 'yes':
                     index = 2
-                states[whoami] = states[whoami].children[index]
+                states[whoami] = states[whoami].induct(index)
                 if type(states[whoami].value) == int:
                     states[whoami] = states[whoami].value
         elif request.method == 'DELETE':
