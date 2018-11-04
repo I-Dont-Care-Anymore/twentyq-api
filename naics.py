@@ -7,17 +7,20 @@ import numpy as np
 import spacy
 from spacy.tokens import Doc
 from spacy.vocab import Vocab
-
+spacy.prefer_gpu()
 nlp = spacy.load('en_core_web_lg')
 
+# Representation of what entries in the CompanyInfo list look like
 CompanyInfo = namedtuple('CompanyInfo', ['Address', 'CompanyDUNSNumber', 'CorporateName', 'EmployeesOnSite', 'Latitude', 'Longitude', 'NAICS1', 'NAICS1Name', 'NAICS2', 'NAICS2Name',
                                          'PointofContact', 'PublicOrPrivate', 'SIC1', 'SIC1Name', 'SIC2', 'SIC2Name', 'SalesVolume', 'Telephone', 'Title', 'TotalEmployees', 'TradestyleName', 'YearStarted'])
 
+# Company info list
 company_infos: List[CompanyInfo] = []
 
 for tup in pd.read_excel('NAICSData.xlsx').itertuples(name='CompanyInfo', index=False):
     company_infos.append(tup)
 
+# NLP analyses of cross references
 cross_references: Dict[int, Doc] = {}
 
 for tup in pd.read_excel('2017_NAICS_Cross_References.xlsx').itertuples():
