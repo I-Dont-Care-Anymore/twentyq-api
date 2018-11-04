@@ -59,7 +59,7 @@ class Node(object):
                 new_categories_tags_dict = self.categories_tags_dict
             elif index == 2:
                 new_categories_tags_dict = right
-                print(f'Eliminated {left}')
+                print(f'Eliminated {left.keys()}')
             return Node(max_depth=self.max_depth, attributes=attributes_copy, categories_tags_dict=new_categories_tags_dict, value=new_node_value, parent=self)
 
 
