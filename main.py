@@ -7,6 +7,7 @@ from uuid import UUID, uuid4
 from lru import LRU
 
 from decisiontree import questions_tree, Node
+from converter import passNAICS
 
 app = Flask(__name__)
 CORS(app, supports_credentials=True)
@@ -19,6 +20,11 @@ states: Dict[UUID, Union[Node, int]] = LRU(10000)
 @app.route("/")
 def index():
     return "Hello, World!"
+
+
+@app.route("/naics/<int:number>", methods=['GET'])
+def naics(number: int):
+    return jsonify(passNAICS(number))
 
 
 # Answer a question as no/not sure/yes
