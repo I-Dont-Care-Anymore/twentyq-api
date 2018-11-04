@@ -83,7 +83,7 @@ attributes: Dict[str, Token] = {}
 for code, doc in cross_references.items():
     for token in doc:
         # if token.pos_ == 'VERB' or token.pos_ == 'NOUN':
-        if token.tag_ == 'NNPS':
+        if token.tag_ == 'NNPS' or token.tag_ == 'NNP' or token.tag_ == 'VB':
             attributes[token.norm_] = token
 
 categories_tags_dict: splitting_metrics.CategoryFreqs = {}
@@ -96,4 +96,4 @@ for code, doc in cross_references.items():
     categories_tags_dict[code] = tag_freqs
 
 questions_tree = TreeClassifier(
-    [token_norm for token_norm in attributes.keys()], categories_tags_dict, max_depth=3)
+    [token_norm for token_norm in attributes.keys()], categories_tags_dict, max_depth=10)
