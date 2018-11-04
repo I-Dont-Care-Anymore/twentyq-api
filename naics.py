@@ -7,7 +7,7 @@ import numpy as np
 import spacy
 from spacy.tokens import Doc
 from spacy.vocab import Vocab
-
+spacy.prefer_gpu()
 nlp = spacy.load('en_core_web_lg')
 
 # Representation of what entries in the CompanyInfo list look like
