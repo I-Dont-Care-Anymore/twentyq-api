@@ -49,7 +49,6 @@ class Node(object):
             new_node_value = splitting_metrics.even(attributes, categories_tags_dict, 0.5, left, right)
 
             attributes_copy = self.attributes.copy()
-            print(f'NODE VALUE IS {new_node_value}')
             attributes_copy.remove(new_node_value)
 
             if index == 0:
@@ -63,18 +62,12 @@ class Node(object):
 
 class TreeClassifier(object):
 
-    def __init__(self, attributes: splitting_metrics.Attributes, categories_tags_dict: splitting_metrics.CategoryFreqs, max_depth: int, split_metric: splitting_metrics.MetricCallable = splitting_metrics.even):
-        self.attributes = attributes
-        self.categories_tags = categories_tags_dict
-        self.split_metric = split_metric
+    def __init__(self, attributes: splitting_metrics.Attributes, categories_tags_dict: splitting_metrics.CategoryFreqs, max_depth: int):
         root_value = splitting_metrics.even(attributes, categories_tags_dict, 0.5, {}, {})
         attributes.remove(root_value)
-        for tag_freqs in categories_tags_dict:
-            tag_freqs.remove(root_value)
+        for tag_value_map in categories_tags_dict.values():
+            tag_value_map.pop(root_value)
         self.root = Node(max_depth=max_depth, attributes=attributes, categories_tags_dict=categories_tags_dict, value=root_value, parent=None)
-
-    def print_tree(self):
-        print(self.root)
 
 
 attributes: Dict[str, Token] = {}
