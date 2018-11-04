@@ -78,17 +78,17 @@ attributes: Dict[str, Token] = {}
 for code, doc in cross_references.items():
     for token in doc:
         if token.tag_ == 'NNPS' or token.tag_ == 'NNP' or token.tag_ == 'NN' or token.tag_ == 'VB':
-            attributes[token.norm_] = token
+            attributes[token.lemma_] = token
 
 categories_tags_dict: splitting_metrics.CategoryFreqs = {}
 print(f'There are {len(attributes)} attributes')
 
 for code, doc in cross_references.items():
     tag_freqs: splitting_metrics.TagSimilarity = {}
-    for token_norm, token in attributes.items():
-        tag_freqs[token_norm] = token.similarity(doc)
+    for token_lemma, token in attributes.items():
+        tag_freqs[token_lemma] = token.similarity(doc)
     categories_tags_dict[code] = tag_freqs
 
 
 questions_tree = TreeClassifier(
-    [token_norm for token_norm in attributes.keys()], categories_tags_dict, max_depth=20)
+    [token_lemma for token_lemma in attributes.keys()], categories_tags_dict, max_depth=20)
