@@ -24,7 +24,7 @@ names: Dict[int, str] = {}
 definitions: Dict[int, Doc] = {}
 
 for tup in pd.read_excel('2017_NAICS_Descriptions.xlsx').itertuples():
-    names[tup.Code] = tup.Title
-    if type(tup.Description) != str:
+    if len(str(tup.Code)) != 6:
         continue
+    names[tup.Code] = tup.Title
     definitions[tup.Code] = Doc(nlp.vocab).from_disk(f'naics/{tup.Code}.sdoc')
