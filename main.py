@@ -29,7 +29,8 @@ def naics(number: int):
     companies = []
     for c in company_infos:
         if c.NAICS1 == number or c.NAICS2 == number:
-            companies.append({'CorporateName': c.CorporateName, 'SalesVolume': c.SalesVolume })
+            companies.append(
+                {'CorporateName': c.CorporateName, 'SalesVolume': c.SalesVolume})
     return jsonify({'companies': companies, 'name': names[number]})
 
 
