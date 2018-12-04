@@ -8,7 +8,8 @@ import spacy
 from spacy.tokens import Doc
 from spacy.vocab import Vocab
 spacy.prefer_gpu()
-nlp = spacy.load('en_core_web_lg')
+spacy.cli.download('en_core_web_sm')
+nlp = spacy.load('en_core_web_sm')
 
 # Representation of what entries in the CompanyInfo list look like
 CompanyInfo = namedtuple('CompanyInfo', ['Address', 'CompanyDUNSNumber', 'CorporateName', 'EmployeesOnSite', 'Latitude', 'Longitude', 'NAICS1', 'NAICS1Name', 'NAICS2', 'NAICS2Name',
